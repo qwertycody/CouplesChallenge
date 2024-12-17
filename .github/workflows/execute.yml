@@ -1,4 +1,4 @@
-name: Daily Python Script Execution
+name: Execute Daily Challenge Reminder
 
 on:
   schedule:
@@ -34,4 +34,4 @@ jobs:
 
       # Execute the Python script
       - name: Execute Python script
-        run: python3 script.py
+        run: python3 execute.py
