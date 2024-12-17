@@ -123,7 +123,7 @@ if __name__ == "__main__":
         
         cleaned_prompt = clean_message(prompt)
 
-        message = f"Today's Prompt:\n\n{cleaned_prompt}"
+        message = f"Garrett Couple's Challenge - Today's Prompt:\n\n{cleaned_prompt}"
 
         print(message)
 
