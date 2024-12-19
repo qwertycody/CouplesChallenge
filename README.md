@@ -3,62 +3,34 @@
 ## **Overview**
 Garrett Couples Challenge is a daily reminder application inspired by the *30-Day Couples Challenge* from [meetthefreemans.com](https://meetthefreemans.com). It helps couples reconnect and strengthen their relationship through quick, actionable prompts delivered consistently every day.
 
----
+## Categories
+Daily prompts are thoughtfully designed and drawn from these categories:
+- **Love Deposit**: Playful gestures to express love and gratitude.
+- **Communication Tip**: Practical advice to improve relationship dynamics.
+- **Conversation Starter**: Thought-provoking questions to spark deeper discussions.
 
-## **Purpose**
-Modern life is busy, and relationships can easily take a back seat. CouplesChallenge provides daily, meaningful activities to:
-- Foster connection and appreciation
-- Improve communication skills
-- Initiate deeper conversations in just **1–5 minutes** per day
+## Purpose and Benefits
+- **Foster Connection**: Small, consistent actions strengthen bonds and show appreciation.  
+- **Improve Communication**: Practical tips and questions enhance listening, understanding, and expression.  
+- **Effortless Engagement**: Automation ensures prompts are delivered daily without manual effort.  
+- **Encourage Interaction**: Slack threads make it easy to share responses and stay connected.  
+- **Ease of Use**: Prompts are quick and simple, making participation stress-free.
 
-## **Benefits**
-- **Reconnect Effortlessly**: Small daily activities lead to stronger, healthier relationships
-- **Consistency**: Automation ensures delivery without manual effort
-- **Engagement**: Slack threads encourage couples to share their responses
-- **Ease of Use**: The prompts require just a few minutes per day
+## Features
+#### Daily Automation:
+- Prompts are delivered at **6 AM EST** via **GitHub Actions**, ensuring reliability and consistency. Manual triggers are also available for testing or re-runs.
 
----
+#### Deterministic Prompt Selection:
+- A Python script selects prompts based on the **month** and **day**, ensuring:
+  - **Non-repeating** outputs within the month.
+  - **Varied** sequences each month through reshuffling.
+  - **Consistency** for the same day when re-run.
 
-## **How It Works**
+#### Slack Integration:
+- Prompts are posted to a designated Slack channel with a **threaded reply**, encouraging couples to share responses.
 
-1. **Daily Prompts**:  
-   Each day, a unique prompt is selected from one of the following categories:
-   - **Love Deposit**: Small, playful gestures to express love and gratitude.
-   - **Communication Tip**: Practical tips to improve listening, understanding, and speaking.
-   - **Conversation Starter**: Thoughtful questions to spark meaningful discussions.
-
-2. **Deterministic Logic**:  
-   A Python script generates a daily prompt number (1–30) based on:
-   - The **month** and **day**, ensuring deterministic but non-repeating outputs within a month.
-   - A **reshuffled order** every month to add variety while maintaining predictability.
-
-3. **Automation**:
-   - The script runs **daily at 6 AM EST** using **GitHub Actions**.
-   - Results are posted to **Slack** and sent via **email** for easy accessibility.
-
-4. **Manual Trigger Support**:  
-   The workflow can also be triggered manually for testing or re-runs.
-
----
-
-## **Features**
-
-### **Daily Automation**
-- Prompts are delivered consistently every day using GitHub Actions.
-- Ensures reliable execution without manual intervention.
-
-### **Slack Integration**
-- The daily prompt is posted to a specified Slack channel.
-- A **threaded reply** is added suggesting participants post their responses in the thread, keeping the discussion organized.
-
-### **Email Integration**
-- Daily prompts are emailed to recipients, including a link to the Slack thread for engagement.
-
-### **Deterministic Prompt Generation**
-- Prompts are:
-   - **Non-repeating** within the month.
-   - **Varied** every month using a reshuffled sequence.
-   - **Consistent** for the same day when re-run (deterministic logic).
+#### Email Integration:
+- Prompts are also emailed to recipients, including a link to the Slack thread for easy engagement.
 
 ---
 
@@ -90,8 +62,6 @@ python execute.py
 - To run it manually:
    - Go to **Actions** in your GitHub repository.
    - Select **"Execute Daily Challenge Reminder"** and click **"Run workflow"**.
-
----
 
 ## **Acknowledgments**
 Inspired by [The Freemans](https://meetthefreemans.com), this application brings their 30-day challenge to life through technology and automation.
