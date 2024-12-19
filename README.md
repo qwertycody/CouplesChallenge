@@ -1,19 +1,21 @@
-Here’s an **updated version** of your `README.md` that reflects the latest context, improves clarity, and incorporates the deterministic prompt selection, Slack threading, and manual trigger features:
-
----
-
-# **CouplesChallenge**
+# **Garrett Couples Challenge**
 
 ## **Overview**
-CouplesChallenge is a daily reminder application inspired by the *30-Day Couples Challenge* from [meetthefreemans.com](https://meetthefreemans.com). It helps couples reconnect and strengthen their relationship through quick, actionable prompts delivered consistently every day.
+Garrett Couples Challenge is a daily reminder application inspired by the *30-Day Couples Challenge* from [meetthefreemans.com](https://meetthefreemans.com). It helps couples reconnect and strengthen their relationship through quick, actionable prompts delivered consistently every day.
 
 ---
 
 ## **Purpose**
 Modern life is busy, and relationships can easily take a back seat. CouplesChallenge provides daily, meaningful activities to:
-- Foster connection and appreciation.
-- Improve communication skills.
-- Initiate deeper conversations in just **1–5 minutes** per day.
+- Foster connection and appreciation
+- Improve communication skills
+- Initiate deeper conversations in just **1–5 minutes** per day
+
+## **Benefits**
+- **Reconnect Effortlessly**: Small daily activities lead to stronger, healthier relationships
+- **Consistency**: Automation ensures delivery without manual effort
+- **Engagement**: Slack threads encourage couples to share their responses
+- **Ease of Use**: The prompts require just a few minutes per day
 
 ---
 
@@ -60,65 +62,14 @@ Modern life is busy, and relationships can easily take a back seat. CouplesChall
 
 ---
 
-## **Workflow Summary**
-
-1. **Python Script Execution**:  
-   Generates a daily prompt number based on the current day and month.
-
-2. **Slack Notification**:  
-   - Posts the daily prompt to Slack.
-   - Adds a threaded reply:  
-     _"Feel free to post your responses here as a reply to this thread!"_
-
-3. **Email Delivery**:  
-   Sends an email with:
-   - The daily prompt.
-   - A link to the Slack message for easy navigation.
-
-4. **Manual Trigger**:  
-   The workflow supports manual execution through the GitHub Actions UI for testing or reruns.
-
----
-
-## **Technical Overview**
-
-1. **Python Script**:
-   - Deterministically generates a daily number between 1–30.
-   - Posts to Slack using the Slack API and constructs a thread for responses.
-   - Sends email notifications using SMTP.
-
-2. **GitHub Actions**:
-   - Automates the script execution at **6 AM EST** every day.
-   - Dynamically generates a `.env` file from GitHub Secrets containing:
-     - Prompts (`PROMPT_1` through `PROMPT_30`).
-     - Slack credentials.
-     - Email credentials.
-
----
-
-## **Setup Instructions**
-
-### **1. Clone the Repository**
-```bash
-git clone https://github.com/your-username/CouplesChallenge.git
-cd CouplesChallenge
-```
-
-### **2. Add GitHub Secrets**
+### **Setup - Add GitHub Secrets**
 In your repository settings, add the following secrets:
 
 | Secret Key         | Description                              |
 |---------------------|------------------------------------------|
-| `ENV_FILE`         | Full content of your `.env` file.        |
-| `SLACK_TOKEN`      | Slack Bot Token for posting messages.    |
-| `SLACK_CHANNEL`    | Slack channel ID for notifications.      |
-| `EMAIL_USERNAME`   | Email sender's username.                 |
-| `EMAIL_PASSWORD`   | Email sender's password.                 |
-| `EMAIL_SMTP_SERVER`| SMTP server address (e.g., smtp.gmail.com). |
-| `EMAIL_SMTP_PORT`  | SMTP port (e.g., 465 for SSL).           |
-| `EMAIL_RECIPIENTS` | Comma-separated list of email recipients.|
+| `ENV_FILE`         | Full content of your `.env` file, see .env.example for format.        |
 
-### **3. Create Prompts in `.env`**
+### **Setup - Create Prompts in `.env`**
 Add 30 unique prompts as environment variables:
 ```plaintext
 PROMPT_1="Send your partner a surprise hug."
@@ -128,25 +79,17 @@ PROMPT_3="Plan a fun weekend date."
 PROMPT_30="End the day with a loving gesture or word."
 ```
 
-### **4. Test the Script Locally**
+### **Development - Test the Script Locally**
 Run the script to test Slack and email delivery:
 ```bash
-python script.py
+python execute.py
 ```
 
-### **5. Schedule and Manual Trigger**
+### **Information - Trigger vi GH Actions**
 - The workflow will run automatically at **6 AM EST** (11 AM UTC).
 - To run it manually:
    - Go to **Actions** in your GitHub repository.
-   - Select **"Daily Python Script Execution"** and click **"Run workflow"**.
-
----
-
-## **Benefits**
-- **Reconnect Effortlessly**: Small daily activities lead to stronger, healthier relationships.
-- **Consistency**: Automation ensures delivery without manual effort.
-- **Engagement**: Slack threads encourage couples to share their responses.
-- **Ease of Use**: The prompts require just a few minutes per day.
+   - Select **"Execute Daily Challenge Reminder"** and click **"Run workflow"**.
 
 ---
 
