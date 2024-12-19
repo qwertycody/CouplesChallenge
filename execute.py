@@ -52,7 +52,19 @@ def clean_message(text):
 
     return cleaned_text
 
-# Updated post_to_slack function
+def get_slack_workspace_url(token):
+    """
+    Retrieve the Slack workspace URL dynamically using the Slack API.
+    """
+    response = requests.get(
+        "https://slack.com/api/team.info",
+        headers={"Authorization": f"Bearer {token}"}
+    )
+    if response.ok and response.json().get("ok"):
+        return response.json()["team"]["domain"]  # Returns the workspace domain
+    else:
+        raise ValueError("Failed to retrieve workspace domain from Slack API")
+
 def post_to_slack(message):
     slack_token = os.getenv("SLACK_TOKEN")
     slack_channel = os.getenv("SLACK_CHANNEL")
@@ -61,10 +73,16 @@ def post_to_slack(message):
         print("Missing Slack credentials. Skipping Slack notification.")
         return "Link not available at this time"
 
-    # Clean up the message
+    # Dynamically retrieve the Slack workspace domain
+    try:
+        workspace_domain = get_slack_workspace_url(slack_token)
+    except ValueError as e:
+        print(e)
+        return "Link not available at this time"
+
     cleaned_message = clean_message(message)
 
-    # Send the initial message to Slack
+    # Send the message to Slack
     response = requests.post(
         "https://slack.com/api/chat.postMessage",
         headers={"Authorization": f"Bearer {slack_token}", "Content-Type": "application/json"},
@@ -73,10 +91,15 @@ def post_to_slack(message):
 
     if response.ok and response.json().get("ok"):
         ts = response.json().get("ts")  # Timestamp of the posted message
-        slack_mobile_url = f"slack://channel?id={slack_channel}&message={ts}"
+        channel_id = response.json().get("channel")  # Use channel ID returned by Slack API
+        formatted_ts = ts.replace('.', '')
+
+        # Construct the thread link for mobile and web
+        slack_url = f"https://{workspace_domain}.slack.com/archives/{channel_id}/p{formatted_ts}"
+
         print("Slack message sent successfully.")
 
-        # Post a thread reply suggesting to post responses
+        # Post a thread reply
         thread_message = "Feel free to post your responses here as a reply to this thread!"
         requests.post(
             "https://slack.com/api/chat.postMessage",
@@ -85,11 +108,11 @@ def post_to_slack(message):
         )
 
         print("Thread reply sent successfully.")
-        return slack_mobile_url
+        return slack_url
     else:
         print("Failed to send Slack message.", response.text)
         return "Link not available at this time"
-    
+
 # Function to send an email with the prompt and Slack link
 def send_email(subject, body):
     smtp_server = os.getenv("EMAIL_SMTP_SERVER")
