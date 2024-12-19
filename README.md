@@ -32,16 +32,16 @@ Daily prompts are thoughtfully designed and drawn from these categories:
 #### Email Integration:
 - Prompts are also emailed to recipients, including a link to the Slack thread for easy engagement.
 
----
+## Setup and Testing
 
-### **Setup - Add GitHub Secrets**
+#### **Setup - Add GitHub Secrets**
 In your repository settings, add the following secrets:
 
 | Secret Key         | Description                              |
 |---------------------|------------------------------------------|
 | `ENV_FILE`         | Full content of your `.env` file, see .env.example for format.        |
 
-### **Setup - Create Prompts in `.env`**
+#### **Setup - Create Prompts in `.env`**
 Add 30 unique prompts as environment variables:
 ```plaintext
 PROMPT_1="Send your partner a surprise hug."
@@ -51,13 +51,13 @@ PROMPT_3="Plan a fun weekend date."
 PROMPT_30="End the day with a loving gesture or word."
 ```
 
-### **Development - Test the Script Locally**
+#### **Development - Test the Script Locally**
 Run the script to test Slack and email delivery:
 ```bash
 python execute.py
 ```
 
-### **Information - Trigger vi GH Actions**
+#### **Information - Trigger vi GH Actions**
 - The workflow will run automatically at **6 AM EST** (11 AM UTC).
 - To run it manually:
    - Go to **Actions** in your GitHub repository.
