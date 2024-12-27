@@ -4,6 +4,7 @@ import random
 import smtplib
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
+from twilio.rest import Client
 import requests
 import html
 
@@ -68,10 +69,20 @@ def get_slack_workspace_url(token):
 def post_to_slack(message):
     slack_token = os.getenv("SLACK_TOKEN")
     slack_channel = os.getenv("SLACK_CHANNEL")
+    slack_member_ids = os.getenv("SLACK_MEMBER_IDS")  # Comma-delimited member IDs
 
     if not slack_token or not slack_channel:
         print("Missing Slack credentials. Skipping Slack notification.")
         return "Link not available at this time"
+
+    # Use the provided member IDs or default to @here if not set
+    if not slack_member_ids or not slack_member_ids.strip():
+        print("No Slack member IDs specified. Defaulting to @here.")
+        member_mentions = "@here"
+    else:
+        # Prepare mentions using provided member IDs
+        member_ids = [member_id.strip() for member_id in slack_member_ids.split(",")]
+        member_mentions = " ".join([f"<@{member_id}>" for member_id in member_ids])
 
     # Dynamically retrieve the Slack workspace domain
     try:
@@ -82,11 +93,14 @@ def post_to_slack(message):
 
     cleaned_message = clean_message(message)
 
+    # Add mentions to the message
+    final_message = f"{cleaned_message}\n\n{member_mentions}"
+
     # Send the message to Slack
     response = requests.post(
         "https://slack.com/api/chat.postMessage",
         headers={"Authorization": f"Bearer {slack_token}", "Content-Type": "application/json"},
-        json={"channel": slack_channel, "text": cleaned_message},
+        json={"channel": slack_channel, "text": final_message},
     )
 
     if response.ok and response.json().get("ok"):
@@ -138,6 +152,31 @@ def send_email(subject, body):
     except Exception as e:
         print(f"Failed to send email: {e}")
 
+# Function to send a text message via Twilio
+def send_text_via_twilio(message):
+    twilio_account_sid = os.getenv("TWILIO_ACCOUNT_SID")
+    twilio_auth_token = os.getenv("TWILIO_AUTH_TOKEN")
+    twilio_from_number = os.getenv("TWILIO_FROM_NUMBER")
+    twilio_to_numbers = os.getenv("TWILIO_TO_NUMBERS")  # Comma-delimited list
+
+    if not all([twilio_account_sid, twilio_auth_token, twilio_from_number, twilio_to_numbers]):
+        print("Missing Twilio credentials. Skipping text message notification.")
+        return
+
+    try:
+        client = Client(twilio_account_sid, twilio_auth_token)
+        to_numbers = [number.strip() for number in twilio_to_numbers.split(",")]
+
+        for to_number in to_numbers:
+            message_instance = client.messages.create(
+                body=message,
+                from_=twilio_from_number,
+                to=to_number
+            )
+            print(f"Text message sent successfully to {to_number}: SID {message_instance.sid}")
+    except Exception as e:
+        print(f"Failed to send text message: {e}")
+
 # Main logic
 if __name__ == "__main__":
     try:
@@ -159,6 +198,9 @@ if __name__ == "__main__":
 
         # Send via email
         send_email("Garrett Couples Challenge - Today's Prompt", email_body)
+
+        # Send via text message using Twilio
+        send_text_via_twilio(f"{message}\n\nSlack Link: {slack_url}")
 
     except Exception as e:
         print(f"An error occurred: {e}")
